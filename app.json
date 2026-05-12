@@ -6,25 +6,74 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.Ledger"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "RECEIVE_SMS",
+        "READ_SMS"
+      ],
+      "predictiveBackGestureEnabled": false,
+      "package": "com.anonymous.Ledger"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Ledger needs access to your camera to scan receipts.",
+          "microphonePermission": "Ledger needs access to your microphone for voice entries."
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Ledger needs access to your microphone for voice entries."
+        }
+      ],
+      "expo-sqlite",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "2.3.0",
+            "gradleVersion": "8.10.2",
+            "minSdk": 26,
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36,
+            "buildToolsVersion": "36.0.0",
+            "packagingOptions": {
+              "excludes": ["lib/x86_64/**", "lib/x86/**", "lib/armeabi-v7a/**"]
+            }
+          }
+        }
+      ],
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Allow Ledger to use the microphone.",
+          "speechRecognitionPermission": "Allow Ledger to use speech recognition.",
+          "androidSpeechServicePackages": [
+            "com.google.android.googlequicksearchbox",
+            "com.google.android.tts"
+          ]
+        }
+      ]
+    ]
   }
 }
