@@ -249,7 +249,7 @@ Day 14: Ledger alerts "Ramesh debt overdue 7 days"
 │  └──────────┴──────────┴──────────┴──────────┘             │
 ├─────────────────────────────────────────────────────────────┤
 │                    HARDWARE (Android 8.0+)                  │
-│  CPU: 4-core │ RAM: 2GB │ Storage: 4GB free                 │
+│  CPU: 8-core ARM64 │ RAM: 8GB │ Storage: 4GB free           │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -257,14 +257,14 @@ Day 14: Ledger alerts "Ramesh debt overdue 7 days"
 
 | Model | Size | RAM Usage | Latency | Purpose |
 |-------|------|-----------|---------|---------|
-| Gemma 4 2B E2B (4-bit) | 2.5GB | 350MB | 2-3s | Extraction, Vision, Queries |
+| Gemma 4 2B E2B (4-bit) | 2.6GB | 3.5GB | 2-3s | Extraction, Vision, Queries |
 | Expo Speech Recognition | <1MB | System | 0.5s | Speech-to-text (STT) |
 | Expo Speech | <1MB | System | 0.2s | Text-to-speech (TTS) |
 | Anomaly detection (statistical) | 0.1MB | 1MB | 0.01s | Expense pattern alerts |
 
 **Total storage:** 2.6GB (one-time download)  
-**Peak RAM:** 511MB  
-**Battery per transaction:** 0.5%
+**Peak RAM:** 4.5GB (during inference)  
+**Battery per transaction:** 0.8%
 
 ### 6.3 Why This Architecture Works
 

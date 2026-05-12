@@ -62,8 +62,8 @@
 | Privacy | 0 bytes sent | Network monitor |
 
 # 5. Technical Constraints
-- Must run on Android 10+ (API 29)
-- Minimum 2GB RAM, 4GB free storage
+- Must run on Android 8.0+ (API 26)
+- Minimum 8GB RAM, 4GB free storage
 - No internet permission
 - All models offline
 
@@ -287,7 +287,7 @@
 # 2. Data Flow Audit
 
 ```
-[User Voice] → [Vosk ASR in RAM] → [Text only to Gemma] → [Voice deleted]
+[User Voice] → [Expo STT in RAM] → [Text only to Gemma] → [Voice deleted]
                     ↓
               [Text logged? NO - ephemeral]
                     ↓
@@ -319,10 +319,10 @@
 
 | SDK | Purpose | Data Access | Removable? |
 |-----|---------|-------------|------------|
-| react-native-litert-lm | LLM inference | None | No |
-| Vosk | ASR | None | No |
-| TensorFlow Lite | OCR | None | No |
-| Expo modules | Permissions, crypto | None | No |
+| react-native-litert-lm | LLM inference (Gemma 4) | None | No |
+| expo-speech-recognition | ASR (Speech-to-text) | None | No |
+| expo-camera / expo-image-picker | Image capture for Vision | None | No |
+| Expo modules | Permissions, crypto, speech | None | No |
 
 **ZERO analytics SDKs. ZERO ad SDKs. ZERO crash reporting without consent.**
 

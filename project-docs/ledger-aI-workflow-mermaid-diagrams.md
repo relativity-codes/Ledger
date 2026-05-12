@@ -18,11 +18,11 @@ flowchart TD
 
     %% Voice Path
     Voice --> Record["Record Audio"]
-    Record --> ASR["Vosk ASR"]
+    Record --> ASR["Expo STT"]
     ASR --> Text["Raw Text"]
 
     %% Image Path
-    Image --> OCR["TFLite OCR"]
+    Image --> OCR["Gemma Vision"]
     OCR --> ImageText["Extracted Text"]
     ImageText --> Text
 
@@ -69,7 +69,7 @@ flowchart TD
 
     AnomalyAlert --> TTS
 
-    Continue --> TTS["Piper TTS"]
+    Continue --> TTS["Expo TTS"]
 
     TTS --> End([User Hears Confirmation])
 
@@ -118,14 +118,14 @@ flowchart TD
     Input[User Intent] --> Router{Input Router}
 
     Router -->|Voice Command| V1[Microphone Active]
-    V1 --> V2["Vosk ASR<br/>Real-time transcription"]
+    V1 --> V2["Expo STT<br/>Real-time transcription"]
     V2 --> V3["Speech to Text"]
     V3 --> Common
 
     Router -->|Take Photo| C1[Camera Opens]
     C1 --> C2[Capture Image]
-    C2 --> C3["TFLite OCR<br/>Text detection"]
-    C3 --> C4["OCR to Text"]
+    C2 --> C3["Gemma Vision<br/>Multimodal analysis"]
+    C3 --> C4["Vision to Text"]
     C4 --> Common
 
     Router -->|SMS Alert| S1[SMS Listener]
@@ -158,7 +158,7 @@ flowchart TD
 flowchart TD
 
     Query["User Query<br/>How much did I spend last week?"]
-        --> TTS1["Optional Voice Input<br/>Vosk ASR"]
+        --> TTS1["Optional Voice Input<br/>Expo STT"]
 
     TTS1 --> TextQuery[Text Query]
 
@@ -188,7 +188,7 @@ flowchart TD
         GemmaSumInfer --> SummaryText["Summary<br/>You spent 1200 rupees on food last week"]
     end
 
-    SummaryText --> TTS2["Piper TTS<br/>Spoken Response"]
+    SummaryText --> TTS2["Expo TTS<br/>Spoken Response"]
 
     TTS2 --> User[User Hears Answer]
 ```
@@ -302,22 +302,18 @@ flowchart TD
     subgraph LoadModels["Model Loading Sequence"]
         LoadModels --> LoadGemma["Load Gemma 4 E2B<br/>react-native-litert-lm"]
 
-        LoadGemma --> LoadVosk["Load Vosk ASR<br/>50 MB model"]
-
-        LoadVosk --> LoadOCR["Load TFLite OCR<br/>3 MB model"]
-
-        LoadOCR --> LoadTTS["Load Piper TTS<br/>5 MB model"]
+        LoadGemma --> LoadTTS["Load Expo TTS<br/>System Engine"]
     end
 
     LoadTTS --> WarmUp["Pre-warm Gemma 4<br/>Send minimal prompt"]
 
-    WarmUp --> Ready["App Ready<br/>Total RAM approximately 1.5 GB"]
+    WarmUp --> Ready["App Ready<br/>Total RAM approximately 4.5 GB"]
 
     Ready --> UserInteraction[User Interaction]
 
     UserInteraction --> Monitor{Memory Monitor}
 
-    Monitor -->|RSS > 1.4 GB| Warning["Show memory warning<br/>Suggest restart"]
+    Monitor -->|RSS > 7.5 GB| Warning["Show memory warning<br/>Suggest restart"]
 
     Monitor -->|Normal| Continue[Continue]
 
@@ -442,11 +438,9 @@ flowchart TD
     subgraph Native["Native AI Layer (Kotlin/C++)"]
         LiteRTLM["react-native-litert-lm<br/>Gemma 4 E2B"]
 
-        Vosk["Vosk<br/>Speech-to-Text"]
+        ExpoSTT["Expo STT<br/>System Native"]
 
-        TFLite["TensorFlow Lite<br/>OCR"]
-
-        Piper[Piper TTS]
+        ExpoTTS["Expo TTS<br/>System Native"]
     end
 
     subgraph Data["Data Layer"]
@@ -454,12 +448,10 @@ flowchart TD
         FTS5[(FTS5 Virtual Table)]
     end
 
-    VoiceScreen -->|Audio| Vosk
-    Vosk -->|Text| InputRouter
+    VoiceScreen -->|Audio| ExpoSTT
+    ExpoSTT -->|Text| InputRouter
 
-    CameraScreen -->|Image| TFLite
-    TFLite -->|Text| InputRouter
-
+    CameraScreen -->|Image| LiteRTLM
     InputRouter -->|Text prompts| LiteRTLM
     LiteRTLM -->|JSON| LedgerEngine
 
@@ -478,12 +470,12 @@ flowchart TD
 
     QueryEngine -->|Summary prompt| LiteRTLM
 
-    LiteRTLM -->|Summary| Piper
+    LiteRTLM -->|Summary| ExpoTTS
 
     AnomalyDetector -->|Read| SQLite
     AnomalyDetector -->|Alert| VoiceScreen
 
-    Piper -->|Audio| VoiceScreen
+    ExpoTTS -->|Audio| VoiceScreen
 ```
 
 
